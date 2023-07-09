@@ -9,6 +9,7 @@ interface PropsGlobal {
     character: Partial<Character>
     charactersOptions: string[]
     message: null | string
+    disabled: boolean
 }
 
 interface Actions {
@@ -18,6 +19,7 @@ interface Actions {
     lessAttemps: () => void
     sendMessage: (sms: (null | string)) => void
     reset: () => void
+    changedisabled: () => void
 }
 
 export const useStore = create<PropsGlobal & Actions>((set) => ({
@@ -26,6 +28,7 @@ export const useStore = create<PropsGlobal & Actions>((set) => ({
     character: {},
     charactersOptions: [],
     message: null,
+    disabled: false,
     getCharacter: async (id) => {
         const req = await axios.get(`https://rickandmortyapi.com/api/character/${id}`)
         const res = await req.data
@@ -59,6 +62,9 @@ export const useStore = create<PropsGlobal & Actions>((set) => ({
     },
     sendMessage: (sms) => {
         set({ message: sms })
+    },
+    changedisabled: () =>{
+        set(state => ({ disabled: !state.disabled }))
     },
     reset: () => {
         set({ points: 0, attempts: [heart, heart, heart], message: null })
